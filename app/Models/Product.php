@@ -3,8 +3,27 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Product extends Model
 {
-    //
+    use SoftDeletes;
+
+    protected $fillable = [
+        'name', 
+        'description',
+        'quantity', 
+        'category_id',
+        'price', 
+        'status', 
+        'image',
+    ];
+
+
+    public function category(): belongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
 }
