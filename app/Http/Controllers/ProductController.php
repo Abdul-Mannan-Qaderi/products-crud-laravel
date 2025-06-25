@@ -18,9 +18,28 @@ class ProductController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->paginate(10);
         } else {
-            $products = Product::orderBy('created_at', 'desc')->paginate(10);
+            $products = Product::latest()->paginate(10);
         }
         return view('product.product-list', compact('products'));
+    }
+
+
+    public function deleted_products(Request $request)
+    {
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $products = Product::onlyTrashed()
+                ->where(function ($query) use ($search) {
+                    $query->where('name', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
+                })
+                ->orderBy('deleted_at', 'desc')
+                ->paginate(10);
+        } else {
+            $products = Product::onlyTrashed()->latest()->paginate(10);
+        }
+
+        return view('product.deleted-products', compact('products'));
     }
 
 
@@ -90,11 +109,26 @@ class ProductController extends Controller
 
       public function destroy(Product $product)
       {
-          if ($product->image && Storage::disk('public')->exists($product->image)) {
-              Storage::disk('public')->delete($product->image);
-          }
           $product->delete();
           return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
       }
 
+
+      public function restore($id)
+      {
+        $product = Product::withTrashed()->findOrFail($id);
+        $product->restore();
+        return redirect()->route('products.index')->with('success', 'Product restored successfully.');
+     }
+
+
+     public function forceDelete($id)
+     {
+        $product = Product::withTrashed()->findOrFail($id);
+        if ($product->image && Storage::disk('public')->exists($product->image)) {
+            Storage::disk('public')->delete($product->image);
+        }
+        $product->forceDelete();
+        return redirect()->route('products.deleted')->with('success', 'Product permanently deleted successfully.'); 
+    }
 }
