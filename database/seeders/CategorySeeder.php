@@ -16,18 +16,6 @@ class CategorySeeder extends Seeder
     {
         // Create 10 categories using the CategoryFactory
         Category::factory(10)->create();
-        
-        // Optionally, you can create specific categories
-        // \App\Models\Category::factory()->create([
-        //     'name' => 'Electronics',
-        //     'description' => 'Devices and gadgets',
-        //     'status' => 'active',
-        // ]);
-        
-        // \App\Models\Category::factory()->create([
-        //     'name' => 'Books',
-        //     'description' => 'Various genres of books',
-        //     'status' => 'active',
-        // ]);
+
     }
 }

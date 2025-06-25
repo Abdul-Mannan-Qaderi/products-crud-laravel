@@ -18,7 +18,8 @@ class CategoryFactory extends Factory
     {
         return [ 
             'name' => fake()->word(),
-            'status' => fake()->randomElement(['active', 'inactive']),
+            'description' => fake()->sentence(),
+'status' => fake()->numberBetween(0, 1),
         ];
     }
 }

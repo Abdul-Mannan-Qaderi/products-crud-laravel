@@ -45,15 +45,13 @@
     <div class="mb-3 col-md-6">
         <label for="category" class="form-label">Category</label>
         <select class="form-select" id="category_id" aria-label="Default select" name="category_id">
-            <option disabled selected>Choose Category</option>
             @foreach ($categories as $category)
                 <option
-                    value="{{ $category->id }}
-                    {{ $category->id == old('category_id', $product->category_id ?? '') ? 'selected' : '' }}">
+                    value="{{ $category->id }}"
+                    {{ $category->id == old('category_id', $product->category_id ?? '') ? 'selected' : '' }}>
                     {{ $category->name }}
                 </option>
             @endforeach
-            <option value="new">New</option>
         </select>
         @error('category_id')
             <div class="text-danger">{{ $message }}</div>
@@ -62,11 +60,11 @@
 
     <div class="mb-3 col-md-6">
         <label for="status" class="form-label">Status</label>
-        <select class="form-select" id="status" aria-label="Default select" name="status">
-            <option value="" selected disabled>Status</option>
-            <option value="1" {{ old('status', $product->status ?? '') == 1 ? 'selected' : '' }}>Active</option>
-            <option value="0" {{ old('status', $product->status ?? '') == 0 ? 'selected' : '' }}>Inactive</option>
-        </select>
+<select class="form-select" name="status" required>
+    <option value="" disabled {{ old('status', $product->status ?? '') === '' ? 'selected' : '' }}>Status</option>
+    <option value="active" {{ old('status', $product->status ?? '') === 'active' ? 'selected' : '' }}>Active</option>
+    <option value="inactive" {{ old('status', $product->status ?? '') === 'inactive' ? 'selected' : '' }}>Inactive</option>
+</select>
         
         @error('status')
             <div class="text-danger">{{ $message }}</div>
